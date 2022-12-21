@@ -12,6 +12,7 @@ int fact(int a)
     return pod;
 }
 
+
 int main (){
     int a;
     cin>>a;
