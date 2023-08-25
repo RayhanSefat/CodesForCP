@@ -1,98 +1,94 @@
-#include<bits/stdc++.h>
+/*Rabbi Zidni Eilmaa*/
 
+#include<bits/stdc++.h>
 using namespace std;
 
-#define fRead(x)        freopen(x,"r",stdin)
-#define fWrite(x)       freopen (x,"w",stdout)
+typedef  long long int          ll;
+typedef  long double            ld;
+typedef  string                 str;
+typedef  vector<ll>             vll;
+typedef  vector<string>         vs;
+typedef  vector<pair<ll, ll>>   vpl;
+typedef  set<ll>                sll;
+typedef  map<ll,ll>             mll;
+typedef  pair<int,int>          pint;
+typedef  pair<ll,ll>            pll;
+double   pi = acos(-1.0);
+#define  debug(x)              cout<<#x<<" "<<x<<endl;
+#define  loop                   for(int i=1; i<=n; i++)
+#define  all(a)                 (a).begin(), (a).end()
+#define  min3(a,b,c)            min(a,min(b,c))
+#define  max3(a,b,c)            max(a,max(b,c))
+#define  min4(a,b,c,d)          min(a,min(b,min(c,d)))
+#define  max4(a,b,c,d)          max(a,max(b,max(c,d)))
+#define  forn(i, n)             fot(int i=1; i<=(int)n; i++)
+#define  ANS                    cout << ans << "\n"
+#define  PY                     cout << "YES\n"
+#define  PN                     cout << "NO\n"
 
-#define LL              long long
-#define ULL             unsigned long long
-#define ff              first
-#define ss              second
-#define pb              push_back
-#define PI              acos(-1.0)
-#define mk              make_pair
-#define pii             pair<int,int>
-#define pll             pair<LL,LL>
+ll mod = 1e9 + 7;
 
+void init(){
 
-#define min3(a,b,c)     min(a,min(b,c))
-#define max3(a,b,c)     max(a,max(b,c))
-#define min4(a,b,c,d)   min(a,min(b,min(c,d)))
-#define max4(a,b,c,d)   max(a,max(b,max(c,d)))
-#define SQR(a)          ((a)*(a))
-#define FOR(i,a,b)      for(int i=a;i<=b;i++)
-#define ROF(i,a,b)      for(int i=a;i>=b;i--)
-#define REP(i,b)        for(int i=0;i<b;i++)
-#define MEM(a,x)        memset(a,x,sizeof(a))
-#define ABS(x)          ((x)<0?-(x):(x))
-#define all(v) v.begin(),v.end()
-#define SORT(v)         sort(v.begin(),v.end())
-#define REV(v)          reverse(v.begin(),v.end())
-
-const int N = 1700000;
-const int MOD = 1e9 + 7;
-const LL P[] = {97, 1000003};
-
-LL bigMod (LL a, LL e) {
-  if (e == -1) e = MOD - 2;
-  LL ret = 1;
-  while (e) {
-    if (e & 1) ret = ret * a % MOD;
-    a = a * a % MOD, e >>= 1;
-  }
-  return ret;
 }
 
-int pwr[2][N], inv[2][N];
-
-void initHash() {
-  for (int it = 0; it < 2; ++it) {
-    pwr[it][0] = inv[it][0] = 1;
-    LL INV_P = bigMod(P[it], -1);
-    for (int i = 1; i < N; ++i) {
-      pwr[it][i] = (LL) pwr[it][i - 1] * P[it] % MOD;
-      inv[it][i] = (LL) inv[it][i - 1] * INV_P % MOD;
-    }
-  }
-}
-
-//Call initHash. The functions are 0 indexed.
-struct RangeHash {
-  vector <int> h[2], rev[2];
-
-  RangeHash (const string S, bool revFlag = 0) {
-    for (int it = 0; it < 2; ++it) {
-      h[it].resize(S.size() + 1, 0);
-      for (int i = 0; i < S.size(); ++i) {
-        h[it][i + 1] = (h[it][i] + (LL) pwr[it][i + 1] * (S[i] - 'a' + 1)) % MOD;
-      }
-      if (revFlag) {
-        rev[it].resize(S.size() + 1, 0);
-        for (int i = 0; i < S.size(); ++i) {
-          rev[it][i + 1] = (rev[it][i] + (LL) inv[it][i + 1] * (S[i] - 'a' + 1)) % MOD;
+ll BigMod(ll a, ll p, ll m){
+    ll ans =1;
+    while(p>0){
+        if(p%2==1){
+            ans=(ans*a)%m;
         }
-      }
+
+        p/=2;
+        a=(a*a)%m;
     }
-  }
 
-  inline LL get (int l, int r) {
-    if (l > r) return 0;
-    LL one = (LL) (h[0][r + 1] - h[0][l]) * inv[0][l + 1] % MOD;
-    LL two = (LL) (h[1][r + 1] - h[1][l]) * inv[1][l + 1] % MOD;
-    if (one < 0) one += MOD; if (two < 0) two += MOD;
-    return one << 31 | two;
-  }
+    return ans;
+}
 
-  inline LL getReverse (int l, int r) {
-    if (l > r) return 0;
-    LL one = (LL) (rev[0][r + 1] - rev[0][l]) * pwr[0][r + 1] % MOD;
-    LL two = (LL) (rev[1][r + 1] - rev[1][l]) * pwr[1][r + 1] % MOD;
-    if (one < 0) one += MOD; if (two < 0) two += MOD;
-    return one << 31 | two;
-  }
-};
+// 151, 153, 1e9 + 7, 1e9 + 9
+vector<pair<ll, ll> > HashUp( string s, ll p1, ll p2, ll mod1, ll mod2){
+    int n = s.size();
+    vector<pair<ll, ll> >hashValues(n+2, {0, 0});
+    ll pod1 = 1, pod2 = 1;
+    ll curr1 = 0, curr2 = 0;
+
+    for(int i=0; i<n; i++){
+        pod1 = (pod1 * p1) % mod1;
+        curr1 = (curr1 + ((s[i] * pod1)) % mod1) % mod1;
+        hashValues[i].first = curr1;
+
+        pod2 = (pod2 * p2) % mod2;
+        curr2 = (curr2 + ((s[i] * pod2)) % mod2) % mod2;
+        hashValues[i].second = curr2;
+    }
+
+    return hashValues;
+}
+
+void solve()
+{
+    
+
+    return;
+}
+
 int main()
 {
+    //freopen("input1.txt", "r", stdin);
 
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.tie(0);
+
+    init();
+    int t=1;
+    //cin>>t;
+    //getchar();
+    for(int i=1; i<=t; i++){
+        //cout << "Case " << i << ": ";
+        solve();
+    }
+
+    return 0;
 }
